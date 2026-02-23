@@ -32,7 +32,6 @@
             position: fixed;
             height: 100vh;
             overflow-y: auto;
-            z-index: 100;
         }
 
         .logo {
@@ -90,7 +89,6 @@
             flex: 1;
             margin-left: 250px;
             padding: 30px;
-            min-height: 100vh;
         }
 
         /* Header */
@@ -233,14 +231,6 @@
             background: #5a67d8;
         }
 
-        .btn-archive {
-            background: #6c757d !important;
-        }
-
-        .btn-archive:hover {
-            background: #5a6268 !important;
-        }
-
         /* Listas */
         .list-item {
             display: flex;
@@ -298,11 +288,6 @@
             color: #17a2b8;
         }
 
-        .status-archived {
-            background: #e9ecef;
-            color: #6c757d;
-        }
-
         .item-actions {
             display: flex;
             gap: 10px;
@@ -340,16 +325,6 @@
         .btn-return {
             background: #28a745;
             color: white;
-        }
-
-        .btn-archive-item {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-restore {
-            background: #ffc107;
-            color: #333;
         }
 
         /* Empty State */
@@ -537,7 +512,7 @@
         }
 
         .hidden {
-            display: none !important;
+            display: none;
         }
     </style>
 </head>
@@ -576,10 +551,6 @@
                 <span>🔧</span>
                 <span class="menu-text">Empréstimos</span>
             </div>
-            <div class="menu-item" onclick="showSection('archived')">
-                <span>📦</span>
-                <span class="menu-text">Itens Arquivados</span>
-            </div>
         </div>
 
         <!-- Conteúdo Principal -->
@@ -604,7 +575,7 @@
                         <div class="stat-info">
                             <h3>Total de Produtos</h3>
                             <div class="number" id="totalProducts">0</div>
-                            <div class="label">itens ativos</div>
+                            <div class="label">itens cadastrados</div>
                         </div>
                     </div>
                     <div class="stat-card">
@@ -656,7 +627,7 @@
             <div id="productsSection" class="hidden">
                 <div class="section">
                     <div class="section-header">
-                        <h2>📦 Produtos Ativos</h2>
+                        <h2>📦 Todos os Produtos</h2>
                         <button onclick="openProductModal()">
                             <span>+</span> Novo Produto
                         </button>
@@ -682,18 +653,6 @@
                     </div>
 
                     <div id="allLoansList"></div>
-                </div>
-            </div>
-
-            <!-- Seção Itens Arquivados -->
-            <div id="archivedSection" class="hidden">
-                <div class="section">
-                    <div class="section-header">
-                        <h2>📦 Itens Arquivados</h2>
-                        <p style="color: #666;">Itens que não serão mais utilizados</p>
-                    </div>
-
-                    <div id="archivedList"></div>
                 </div>
             </div>
         </div>
@@ -764,12 +723,12 @@
     <script>
         // DADOS INICIAIS
         let products = JSON.parse(localStorage.getItem('products')) || [
-            { id: 1, name: 'Tesoura de Poda', local: 'Prateleira A1', category: 'Jardim', quantity: 8, minQuantity: 3, archived: false },
-            { id: 2, name: 'Alicate Universal', local: 'Gaveta 10', category: 'Elétrica', quantity: 5, minQuantity: 2, archived: false },
-            { id: 3, name: 'Martelo', local: 'Prateleira B1', category: 'Ferramentas', quantity: 10, minQuantity: 4, archived: false },
-            { id: 4, name: 'Luva de Raspa', local: 'Armário D1', category: 'EPI', quantity: 12, minQuantity: 5, archived: false },
-            { id: 5, name: 'Fita Veda-rosca', local: 'Gaveta 16', category: 'Hidráulica', quantity: 15, minQuantity: 5, archived: false },
-            { id: 6, name: 'Cadeado', local: 'Gaveta 17', category: 'Geral', quantity: 8, minQuantity: 3, archived: false }
+            { id: 1, name: 'Tesoura de Poda', local: 'Prateleira A1', category: 'Jardim', quantity: 8, minQuantity: 3 },
+            { id: 2, name: 'Alicate Universal', local: 'Gaveta 10', category: 'Elétrica', quantity: 5, minQuantity: 2 },
+            { id: 3, name: 'Martelo', local: 'Prateleira B1', category: 'Ferramentas', quantity: 10, minQuantity: 4 },
+            { id: 4, name: 'Luva de Raspa', local: 'Armário D1', category: 'EPI', quantity: 12, minQuantity: 5 },
+            { id: 5, name: 'Fita Veda-rosca', local: 'Gaveta 16', category: 'Hidráulica', quantity: 15, minQuantity: 5 },
+            { id: 6, name: 'Cadeado', local: 'Gaveta 17', category: 'Geral', quantity: 8, minQuantity: 3 }
         ];
         
         let loans = JSON.parse(localStorage.getItem('loans')) || [];
@@ -790,7 +749,6 @@
                 loadProducts();
                 loadCategoryFilter();
                 loadLoanProductSelect();
-                loadArchivedItems();
             } else {
                 alert('Usuário ou senha incorretos! Use admin / 123456');
             }
@@ -810,15 +768,13 @@
             document.getElementById('dashboardSection').classList.add('hidden');
             document.getElementById('productsSection').classList.add('hidden');
             document.getElementById('loansSection').classList.add('hidden');
-            document.getElementById('archivedSection').classList.add('hidden');
             
             document.getElementById(section + 'Section').classList.remove('hidden');
             
             const titles = {
                 'dashboard': 'Dashboard',
-                'products': 'Produtos Ativos',
-                'loans': 'Empréstimos',
-                'archived': 'Itens Arquivados'
+                'products': 'Produtos',
+                'loans': 'Empréstimos'
             };
             document.getElementById('sectionTitle').textContent = titles[section];
             
@@ -827,17 +783,14 @@
                 loadCategoryFilter();
             } else if (section === 'loans') {
                 loadAllLoans();
-            } else if (section === 'archived') {
-                loadArchivedItems();
             }
         }
 
         // DASHBOARD
         function updateDashboard() {
-            const activeProducts = products.filter(p => !p.archived);
-            document.getElementById('totalProducts').textContent = activeProducts.length;
+            document.getElementById('totalProducts').textContent = products.length;
             
-            const lowStock = activeProducts.filter(p => p.quantity <= p.minQuantity);
+            const lowStock = products.filter(p => p.quantity <= p.minQuantity);
             document.getElementById('lowStockCount').textContent = lowStock.length;
             
             const activeLoans = loans.filter(l => !l.returned);
@@ -898,8 +851,7 @@
 
         // PRODUTOS
         function loadCategoryFilter() {
-            const activeProducts = products.filter(p => !p.archived);
-            const cats = ['todos', ...new Set(activeProducts.map(p => p.category))];
+            const cats = ['todos', ...new Set(products.map(p => p.category))];
             const filterDiv = document.getElementById('categoryFilter');
             
             filterDiv.innerHTML = cats.map(cat => 
@@ -922,8 +874,7 @@
 
         function filterProducts() {
             const search = document.getElementById('searchProduct').value.toLowerCase();
-            const activeProducts = products.filter(p => !p.archived);
-            const filtered = activeProducts.filter(p => 
+            const filtered = products.filter(p => 
                 (currentCategory === 'todos' || p.category === currentCategory) &&
                 (p.name.toLowerCase().includes(search) || p.local.toLowerCase().includes(search))
             );
@@ -951,7 +902,6 @@
                         <div class="item-actions">
                             <button class="btn-edit" onclick="editProduct(${p.id})">Editar</button>
                             <button class="btn-loan" onclick="openLoanModal(${p.id})">Emprestar</button>
-                            <button class="btn-archive-item" onclick="archiveProduct(${p.id})">Arquivar</button>
                             <button class="btn-delete" onclick="deleteProduct(${p.id})">Excluir</button>
                         </div>
                     </div>
@@ -995,8 +945,7 @@
                 local: document.getElementById('productLocal').value,
                 category: document.getElementById('productCategory').value,
                 quantity: parseInt(document.getElementById('productQuantity').value) || 0,
-                minQuantity: parseInt(document.getElementById('productMinQuantity').value) || 0,
-                archived: false
+                minQuantity: parseInt(document.getElementById('productMinQuantity').value) || 0
             };
             
             if (!product.name || !product.local || !product.category) {
@@ -1020,74 +969,23 @@
             loadLoanProductSelect();
         }
 
-        function archiveProduct(id) {
-            if (confirm('Arquivar este item? Ele não aparecerá mais na lista de produtos ativos.')) {
-                const index = products.findIndex(p => p.id === id);
-                products[index].archived = true;
-                localStorage.setItem('products', JSON.stringify(products));
-                loadProducts();
-                updateDashboard();
-                loadCategoryFilter();
-                loadArchivedItems();
-            }
-        }
-
         function deleteProduct(id) {
-            if (confirm('Excluir permanentemente este item?')) {
+            if (confirm('Excluir este item?')) {
                 products = products.filter(p => p.id !== id);
                 localStorage.setItem('products', JSON.stringify(products));
                 loadProducts();
                 updateDashboard();
                 loadCategoryFilter();
-                loadArchivedItems();
             }
-        }
-
-        // ITENS ARQUIVADOS
-        function loadArchivedItems() {
-            const archived = products.filter(p => p.archived);
-            const list = document.getElementById('archivedList');
-            
-            if (archived.length > 0) {
-                list.innerHTML = archived.map(p => `
-                    <div class="list-item">
-                        <div class="item-info">
-                            <h4>${p.name}</h4>
-                            <p>📍 ${p.local}</p>
-                            <p>🏷️ ${p.category}</p>
-                            <small>Quantidade: ${p.quantity}</small>
-                        </div>
-                        <div class="item-status status-archived">
-                            Arquivado
-                        </div>
-                        <div class="item-actions">
-                            <button class="btn-restore" onclick="restoreProduct(${p.id})">Restaurar</button>
-                            <button class="btn-delete" onclick="deleteProduct(${p.id})">Excluir</button>
-                        </div>
-                    </div>
-                `).join('');
-            } else {
-                list.innerHTML = '<div class="empty-state"><span>📦</span><p>Nenhum item arquivado</p></div>';
-            }
-        }
-
-        function restoreProduct(id) {
-            const index = products.findIndex(p => p.id === id);
-            products[index].archived = false;
-            localStorage.setItem('products', JSON.stringify(products));
-            loadArchivedItems();
-            loadProducts();
-            updateDashboard();
         }
 
         // EMPRÉSTIMOS
         function loadLoanProductSelect() {
             const select = document.getElementById('loanProduct');
             const activeLoans = loans.filter(l => !l.returned);
-            const activeProducts = products.filter(p => !p.archived);
             
             select.innerHTML = '<option value="">Selecione um item</option>' +
-                activeProducts.map(p => {
+                products.map(p => {
                     const loaned = activeLoans.filter(l => l.productId === p.id).reduce((s, l) => s + l.quantity, 0);
                     const available = p.quantity - loaned;
                     return `<option value="${p.id}" ${available <= 0 ? 'disabled' : ''}>
@@ -1145,9 +1043,6 @@
             updateDashboard();
             loadProducts();
             loadLoanProductSelect();
-            // Voltar para dashboard após empréstimo
-            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-            document.querySelector('.menu-item[onclick*="dashboard"]').classList.add('active');
             showSection('dashboard');
         }
 
@@ -1245,9 +1140,6 @@
             updateDashboard();
             loadProducts();
             loadLoanProductSelect();
-            // Voltar para dashboard após devolução
-            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-            document.querySelector('.menu-item[onclick*="dashboard"]').classList.add('active');
             showSection('dashboard');
         }
 
