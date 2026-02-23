@@ -411,26 +411,6 @@
             color: white;
         }
 
-        .view-toggle {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 20px;
-        }
-
-        .view-toggle button {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 8px;
-            background: #f0f0f0;
-            color: #666;
-            cursor: pointer;
-        }
-
-        .view-toggle button.active {
-            background: #667eea;
-            color: white;
-        }
-
         /* Modal */
         .modal {
             display: none;
@@ -1165,6 +1145,9 @@
             updateDashboard();
             loadProducts();
             loadLoanProductSelect();
+            // Voltar para dashboard após empréstimo
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            document.querySelector('.menu-item[onclick*="dashboard"]').classList.add('active');
             showSection('dashboard');
         }
 
@@ -1262,6 +1245,9 @@
             updateDashboard();
             loadProducts();
             loadLoanProductSelect();
+            // Voltar para dashboard após devolução
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            document.querySelector('.menu-item[onclick*="dashboard"]').classList.add('active');
             showSection('dashboard');
         }
 
