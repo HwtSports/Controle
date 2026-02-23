@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Estoque</title>
     <style>
-        /* (mesmo estilo anterior, mas vou manter para não quebrar) */
         * {
             margin: 0;
             padding: 0;
@@ -18,13 +17,11 @@
             min-height: 100vh;
         }
 
-        /* Container principal */
         .app-container {
             display: flex;
             min-height: 100vh;
         }
 
-        /* Menu Lateral */
         .sidebar {
             width: 260px;
             background: white;
@@ -89,7 +86,6 @@
             font-weight: 500;
         }
 
-        /* Conteúdo Principal */
         .main-content {
             flex: 1;
             margin-left: 260px;
@@ -97,7 +93,6 @@
             min-height: 100vh;
         }
 
-        /* Header */
         .header {
             background: white;
             border-radius: 20px;
@@ -144,7 +139,6 @@
             background: #dc2626;
         }
 
-        /* Cards de Estatísticas */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -202,7 +196,6 @@
             margin-top: 2px;
         }
 
-        /* Seções */
         .section {
             background: white;
             border-radius: 20px;
@@ -254,7 +247,6 @@
             background: #e2e8f0 !important;
         }
 
-        /* Listas */
         .list-item {
             display: flex;
             justify-content: space-between;
@@ -372,7 +364,6 @@
             color: white;
         }
 
-        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 48px 20px;
@@ -390,7 +381,6 @@
             font-size: 14px;
         }
 
-        /* Filtros */
         .filters {
             display: flex;
             gap: 16px;
@@ -445,7 +435,6 @@
             font-size: 13px;
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -536,7 +525,15 @@
             background: #2563eb;
         }
 
-        /* Login */
+        .datetime-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .datetime-row input {
+            flex: 1;
+        }
+
         .login-container {
             max-width: 380px;
             margin: 120px auto;
@@ -597,7 +594,6 @@
             display: none !important;
         }
 
-        /* Timeline de movimentações */
         .timeline {
             display: flex;
             flex-direction: column;
@@ -674,13 +670,13 @@
                 <span>🔧</span>
                 <span class="menu-text">Empréstimos</span>
             </div>
-            <div class="menu-item" onclick="showSection('withdrawals')">
-                <span>🗑️</span>
-                <span class="menu-text">Retiradas</span>
-            </div>
             <div class="menu-item" onclick="showSection('history')">
                 <span>📋</span>
                 <span class="menu-text">Histórico</span>
+            </div>
+            <div class="menu-item" onclick="showSection('permanent')">
+                <span>🗑️</span>
+                <span class="menu-text">Baixas</span>
             </div>
         </div>
 
@@ -697,7 +693,6 @@
 
             <!-- Seção Dashboard -->
             <div id="dashboardSection">
-                <!-- Cards de Estatísticas -->
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon">
@@ -731,7 +726,6 @@
                     </div>
                 </div>
 
-                <!-- Estoque Baixo -->
                 <div class="section">
                     <div class="section-header">
                         <h2>📦 Estoque Baixo</h2>
@@ -742,7 +736,6 @@
                     </div>
                 </div>
 
-                <!-- Empréstimos Ativos -->
                 <div class="section">
                     <div class="section-header">
                         <h2>🔧 Empréstimos Ativos</h2>
@@ -753,7 +746,6 @@
                     </div>
                 </div>
 
-                <!-- Últimas Movimentações -->
                 <div class="section">
                     <div class="section-header">
                         <h2>📋 Últimas Movimentações</h2>
@@ -798,18 +790,6 @@
                 </div>
             </div>
 
-            <!-- Seção Retiradas Permanentes -->
-            <div id="withdrawalsSection" class="hidden">
-                <div class="section">
-                    <div class="section-header">
-                        <h2>🗑️ Retiradas Permanentes</h2>
-                        <p style="color: #64748b;">Itens retirados para uso único (não devolvidos)</p>
-                    </div>
-
-                    <div id="withdrawalsList"></div>
-                </div>
-            </div>
-
             <!-- Seção Histórico -->
             <div id="historySection" class="hidden">
                 <div class="section">
@@ -821,6 +801,18 @@
                     </div>
 
                     <div id="historyList"></div>
+                </div>
+            </div>
+
+            <!-- Seção Baixas (itens retirados permanentemente) -->
+            <div id="permanentSection" class="hidden">
+                <div class="section">
+                    <div class="section-header">
+                        <h2>🗑️ Baixas Permanentes</h2>
+                        <p style="color: #64748b;">Itens retirados para uso único (não serão devolvidos)</p>
+                    </div>
+
+                    <div id="permanentList"></div>
                 </div>
             </div>
         </div>
@@ -864,7 +856,10 @@
                 <input type="text" id="loanUserName" placeholder="Nome de quem está pegando">
                 <select id="loanProduct"></select>
                 <input type="number" id="loanQuantity" placeholder="Quantidade" value="1">
-                <input type="date" id="loanDate">
+                <div class="datetime-row">
+                    <input type="date" id="loanDate">
+                    <input type="time" id="loanTime" value="08:00">
+                </div>
                 <textarea id="loanObservation" placeholder="Observação"></textarea>
                 <button onclick="saveLoan()">Registrar Empréstimo</button>
             </div>
@@ -880,7 +875,10 @@
             </div>
             <div class="modal-form">
                 <div style="background: #f8fafc; padding: 16px; border-radius: 12px; margin-bottom: 16px;" id="returnInfo"></div>
-                <input type="date" id="returnDate">
+                <div class="datetime-row">
+                    <input type="date" id="returnDate">
+                    <input type="time" id="returnTime" value="08:00">
+                </div>
                 <textarea id="returnObservation" placeholder="Observação"></textarea>
                 <input type="hidden" id="returnLoanId">
                 <button onclick="saveReturn()">Confirmar Devolução</button>
@@ -888,21 +886,24 @@
         </div>
     </div>
 
-    <!-- Modal de Retirada Permanente (Baixa) -->
-    <div id="withdrawalModal" class="modal">
+    <!-- Modal de Baixa Permanente -->
+    <div id="permanentModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Registrar Retirada Permanente</h2>
-                <button class="close-btn" onclick="closeModal('withdrawalModal')">&times;</button>
+                <h2>Registrar Baixa Permanente</h2>
+                <button class="close-btn" onclick="closeModal('permanentModal')">&times;</button>
             </div>
             <div class="modal-form">
-                <div style="background: #f8fafc; padding: 16px; border-radius: 12px; margin-bottom: 16px;" id="withdrawalInfo"></div>
-                <input type="text" id="withdrawalUserName" placeholder="Nome de quem está retirando">
-                <input type="number" id="withdrawalQuantity" placeholder="Quantidade" value="1" min="1">
-                <input type="date" id="withdrawalDate">
-                <textarea id="withdrawalObservation" placeholder="Observação (opcional)"></textarea>
-                <input type="hidden" id="withdrawalProductId">
-                <button onclick="saveWithdrawal()">Confirmar Retirada</button>
+                <div style="background: #f8fafc; padding: 16px; border-radius: 12px; margin-bottom: 16px;" id="permanentInfo"></div>
+                <input type="text" id="permanentUserName" placeholder="Nome de quem está retirando">
+                <input type="number" id="permanentQuantity" placeholder="Quantidade" value="1">
+                <div class="datetime-row">
+                    <input type="date" id="permanentDate">
+                    <input type="time" id="permanentTime" value="08:00">
+                </div>
+                <textarea id="permanentObservation" placeholder="Motivo da baixa (opcional)"></textarea>
+                <input type="hidden" id="permanentProductId">
+                <button onclick="savePermanent()">Confirmar Baixa</button>
             </div>
         </div>
     </div>
@@ -919,7 +920,6 @@
         ];
         
         let loans = JSON.parse(localStorage.getItem('loans')) || [];
-        let withdrawals = JSON.parse(localStorage.getItem('withdrawals')) || []; // Retiradas permanentes
         let movements = JSON.parse(localStorage.getItem('movements')) || [];
         let currentUser = null;
         let currentCategory = 'todos';
@@ -937,7 +937,7 @@
                 loadProducts();
                 loadCategoryFilter();
                 loadLoanProductSelect();
-                loadWithdrawals();
+                loadPermanentItems();
                 loadHistory();
             } else {
                 alert('Usuário ou senha incorretos! Use admin / 123456');
@@ -958,17 +958,17 @@
             document.getElementById('dashboardSection').classList.add('hidden');
             document.getElementById('productsSection').classList.add('hidden');
             document.getElementById('loansSection').classList.add('hidden');
-            document.getElementById('withdrawalsSection').classList.add('hidden');
             document.getElementById('historySection').classList.add('hidden');
+            document.getElementById('permanentSection').classList.add('hidden');
             
             document.getElementById(section + 'Section').classList.remove('hidden');
             
             const titles = {
                 'dashboard': 'Dashboard',
-                'products': 'Produtos',
+                'products': 'Produtos Ativos',
                 'loans': 'Empréstimos',
-                'withdrawals': 'Retiradas Permanentes',
-                'history': 'Histórico'
+                'history': 'Histórico',
+                'permanent': 'Baixas Permanentes'
             };
             document.getElementById('sectionTitle').textContent = titles[section];
             
@@ -977,19 +977,18 @@
                 loadCategoryFilter();
             } else if (section === 'loans') {
                 loadAllLoans();
-            } else if (section === 'withdrawals') {
-                loadWithdrawals();
             } else if (section === 'history') {
                 loadHistory();
+            } else if (section === 'permanent') {
+                loadPermanentItems();
             }
         }
 
         // DASHBOARD
         function updateDashboard() {
-            const activeProducts = products; // todos são ativos (não arquivamos)
-            document.getElementById('totalProducts').textContent = activeProducts.length;
+            document.getElementById('totalProducts').textContent = products.length;
             
-            const lowStock = activeProducts.filter(p => p.quantity <= p.minQuantity);
+            const lowStock = products.filter(p => p.quantity <= p.minQuantity);
             document.getElementById('lowStockCount').textContent = lowStock.length;
             
             const activeLoans = loans.filter(l => !l.returned);
@@ -1028,7 +1027,7 @@
                             <h4>${l.productName}</h4>
                             <p>👤 ${l.userName}</p>
                             <p>📍 ${l.productLocal}</p>
-                            <small>📅 ${l.date}</small>
+                            <small>📅 ${formatDateTime(l.datetime)}</small>
                         </div>
                         <div class="item-status status-loan">
                             ${l.quantity} unid.
@@ -1061,8 +1060,8 @@
                             </div>
                             <div class="timeline-content">
                                 <h4>${m.productName}</h4>
-                                <p>${m.type === 'entry' ? 'Entrada' : m.type === 'exit' ? 'Saída' : m.type === 'loan' ? 'Empréstimo' : m.type === 'return' ? 'Devolução' : 'Retirada Permanente'} • ${m.quantity} unid.</p>
-                                <small>${m.date}</small>
+                                <p>${m.type === 'entry' ? 'Entrada' : m.type === 'exit' ? 'Saída' : m.type === 'loan' ? 'Empréstimo' : m.type === 'return' ? 'Devolução' : 'Baixa'} • ${m.quantity} unid.</p>
+                                <small>${formatDateTime(m.datetime)}</small>
                             </div>
                         </div>
                     `;
@@ -1075,6 +1074,13 @@
                     </div>
                 `;
             }
+        }
+
+        // Utilitário para formatar data/hora
+        function formatDateTime(datetimeStr) {
+            if (!datetimeStr) return '';
+            const [date, time] = datetimeStr.split(' ');
+            return `${date} ${time}`;
         }
 
         // PRODUTOS
@@ -1130,7 +1136,7 @@
                         <div class="item-actions">
                             <button class="btn-edit" onclick="editProduct(${p.id})">Editar</button>
                             <button class="btn-loan" onclick="openLoanModal(${p.id})">Emprestar</button>
-                            <button class="btn-permanent" onclick="openWithdrawalModal(${p.id})">Retirar</button>
+                            <button class="btn-permanent" onclick="openPermanentModal(${p.id})">Baixa</button>
                             <button class="btn-delete" onclick="deleteProduct(${p.id})">Excluir</button>
                         </div>
                     </div>
@@ -1205,108 +1211,8 @@
                 loadProducts();
                 updateDashboard();
                 loadCategoryFilter();
-                loadWithdrawals();
+                loadPermanentItems();
             }
-        }
-
-        // RETIRADA PERMANENTE (Baixa)
-        function openWithdrawalModal(productId) {
-            const product = products.find(p => p.id === productId);
-            if (product) {
-                document.getElementById('withdrawalInfo').innerHTML = `
-                    <strong>Registrar retirada permanente:</strong><br>
-                    🔧 ${product.name}<br>
-                    📦 Quantidade atual: ${product.quantity}
-                `;
-                document.getElementById('withdrawalUserName').value = '';
-                document.getElementById('withdrawalQuantity').value = '1';
-                document.getElementById('withdrawalDate').value = new Date().toISOString().split('T')[0];
-                document.getElementById('withdrawalObservation').value = '';
-                document.getElementById('withdrawalProductId').value = productId;
-                document.getElementById('withdrawalModal').classList.add('active');
-            }
-        }
-
-        function saveWithdrawal() {
-            const productId = parseInt(document.getElementById('withdrawalProductId').value);
-            const userName = document.getElementById('withdrawalUserName').value;
-            const quantity = parseInt(document.getElementById('withdrawalQuantity').value);
-            const date = document.getElementById('withdrawalDate').value;
-            const observation = document.getElementById('withdrawalObservation').value;
-
-            if (!userName || !quantity || !date) {
-                alert('Preencha nome, quantidade e data!');
-                return;
-            }
-
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-
-            if (quantity > product.quantity) {
-                alert('Quantidade insuficiente em estoque!');
-                return;
-            }
-
-            // Reduz a quantidade do produto
-            product.quantity -= quantity;
-
-            // Registra a retirada permanente
-            const withdrawal = {
-                id: Date.now(),
-                userName,
-                productId: product.id,
-                productName: product.name,
-                productLocal: product.local,
-                quantity,
-                date,
-                observation
-            };
-            withdrawals.push(withdrawal);
-
-            // Registra a movimentação
-            movements.push({
-                id: Date.now() + 1,
-                productId: product.id,
-                productName: product.name,
-                quantity,
-                date,
-                type: 'withdrawal',
-                observation: `Retirado por ${userName} - ${observation}`
-            });
-
-            localStorage.setItem('products', JSON.stringify(products));
-            localStorage.setItem('withdrawals', JSON.stringify(withdrawals));
-            localStorage.setItem('movements', JSON.stringify(movements));
-
-            closeModal('withdrawalModal');
-            loadProducts();
-            updateDashboard();
-            loadWithdrawals();
-            loadHistory();
-        }
-
-        // CARREGAR RETIRADAS
-        function loadWithdrawals() {
-            const list = document.getElementById('withdrawalsList');
-            if (withdrawals.length === 0) {
-                list.innerHTML = '<div class="empty-state"><span>🗑️</span><p>Nenhuma retirada permanente registrada</p></div>';
-                return;
-            }
-
-            list.innerHTML = withdrawals.sort((a,b) => b.id - a.id).map(w => `
-                <div class="list-item">
-                    <div class="item-info">
-                        <h4>${w.productName}</h4>
-                        <p>👤 ${w.userName}</p>
-                        <p>📍 ${w.productLocal}</p>
-                        <small>📅 ${w.date} • Quantidade: ${w.quantity}</small>
-                        ${w.observation ? `<br><small>📝 ${w.observation}</small>` : ''}
-                    </div>
-                    <div class="item-status status-archived">
-                        Retirado
-                    </div>
-                </div>
-            `).join('');
         }
 
         // EMPRÉSTIMOS
@@ -1328,6 +1234,7 @@
             document.getElementById('loanUserName').value = '';
             document.getElementById('loanQuantity').value = '1';
             document.getElementById('loanDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('loanTime').value = new Date().toTimeString().slice(0,5);
             document.getElementById('loanObservation').value = '';
             if (productId) document.getElementById('loanProduct').value = productId;
             document.getElementById('loanModal').classList.add('active');
@@ -1338,13 +1245,15 @@
             const pid = parseInt(document.getElementById('loanProduct').value);
             const qty = parseInt(document.getElementById('loanQuantity').value);
             const date = document.getElementById('loanDate').value;
+            const time = document.getElementById('loanTime').value;
             
-            if (!user || !pid || !qty || !date) {
+            if (!user || !pid || !qty || !date || !time) {
                 alert('Preencha todos os campos!');
                 return;
             }
             
             const product = products.find(p => p.id === pid);
+            const datetime = `${date} ${time}`;
             
             loans.push({
                 id: Date.now(),
@@ -1353,7 +1262,7 @@
                 productName: product.name,
                 productLocal: product.local,
                 quantity: qty,
-                date,
+                datetime: datetime,
                 returned: false
             });
             
@@ -1362,7 +1271,7 @@
                 productId: pid,
                 productName: product.name,
                 quantity: qty,
-                date,
+                datetime: datetime,
                 type: 'loan',
                 observation: `Emprestado para ${user}`
             });
@@ -1396,7 +1305,7 @@
                             <h4>${l.productName}</h4>
                             <p>👤 ${l.userName}</p>
                             <p>📍 ${l.productLocal}</p>
-                            <small>📅 ${l.date}</small>
+                            <small>📅 ${formatDateTime(l.datetime)}</small>
                         </div>
                         <div class="item-status status-loan">
                             ${l.quantity} unid.
@@ -1417,8 +1326,8 @@
                         <div class="item-info">
                             <h4>${l.productName}</h4>
                             <p>👤 ${l.userName}</p>
-                            <p>📅 Empréstimo: ${l.date}</p>
-                            <p>✅ Devolução: ${l.returnDate || 'N/A'}</p>
+                            <p>📅 Empréstimo: ${formatDateTime(l.datetime)}</p>
+                            <p>✅ Devolução: ${formatDateTime(l.returnDatetime)}</p>
                         </div>
                         <div class="item-status status-ok">
                             ${l.quantity} unid.
@@ -1440,6 +1349,7 @@
                     📦 Quantidade: ${loan.quantity}
                 `;
                 document.getElementById('returnDate').value = new Date().toISOString().split('T')[0];
+                document.getElementById('returnTime').value = new Date().toTimeString().slice(0,5);
                 document.getElementById('returnLoanId').value = loanId;
                 document.getElementById('returnModal').classList.add('active');
             }
@@ -1448,19 +1358,20 @@
         function saveReturn() {
             const loanId = parseInt(document.getElementById('returnLoanId').value);
             const returnDate = document.getElementById('returnDate').value;
+            const returnTime = document.getElementById('returnTime').value;
             
             const index = loans.findIndex(l => l.id === loanId);
             if (index === -1) return;
             
             loans[index].returned = true;
-            loans[index].returnDate = returnDate;
+            loans[index].returnDatetime = `${returnDate} ${returnTime}`;
             
             movements.push({
                 id: Date.now(),
                 productId: loans[index].productId,
                 productName: loans[index].productName,
                 quantity: loans[index].quantity,
-                date: returnDate,
+                datetime: `${returnDate} ${returnTime}`,
                 type: 'return',
                 observation: `Devolvido por ${loans[index].userName}`
             });
@@ -1475,12 +1386,117 @@
             showSection('dashboard');
         }
 
+        // BAIXA PERMANENTE (retirada sem devolução)
+        function openPermanentModal(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                document.getElementById('permanentInfo').innerHTML = `
+                    <strong>Registrar baixa permanente:</strong><br>
+                    🔧 ${product.name}<br>
+                    📦 Quantidade atual: ${product.quantity}
+                `;
+                document.getElementById('permanentUserName').value = '';
+                document.getElementById('permanentQuantity').value = 1;
+                document.getElementById('permanentDate').value = new Date().toISOString().split('T')[0];
+                document.getElementById('permanentTime').value = new Date().toTimeString().slice(0,5);
+                document.getElementById('permanentObservation').value = '';
+                document.getElementById('permanentProductId').value = productId;
+                document.getElementById('permanentModal').classList.add('active');
+            }
+        }
+
+        function savePermanent() {
+            const productId = parseInt(document.getElementById('permanentProductId').value);
+            const userName = document.getElementById('permanentUserName').value;
+            const qty = parseInt(document.getElementById('permanentQuantity').value);
+            const date = document.getElementById('permanentDate').value;
+            const time = document.getElementById('permanentTime').value;
+            const observation = document.getElementById('permanentObservation').value;
+            
+            if (!userName || !qty || !date || !time) {
+                alert('Preencha nome, quantidade, data e hora!');
+                return;
+            }
+            
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            if (qty > product.quantity) {
+                alert('Quantidade indisponível em estoque!');
+                return;
+            }
+
+            // Reduzir do estoque
+            product.quantity -= qty;
+            
+            const datetime = `${date} ${time}`;
+
+            // Registrar movimentação de baixa
+            movements.push({
+                id: Date.now(),
+                productId: product.id,
+                productName: product.name,
+                quantity: qty,
+                datetime: datetime,
+                type: 'permanent',
+                observation: `Baixa permanente - ${userName} - ${observation}`
+            });
+
+            // Registrar em uma lista separada de baixas? Podemos usar um array específico ou apenas movements.
+            // Vamos criar uma lista de baixas para exibir na seção.
+            let permanentItems = JSON.parse(localStorage.getItem('permanent')) || [];
+            permanentItems.push({
+                id: Date.now(),
+                userName: userName,
+                productName: product.name,
+                productLocal: product.local,
+                quantity: qty,
+                datetime: datetime,
+                observation: observation
+            });
+            localStorage.setItem('permanent', JSON.stringify(permanentItems));
+            
+            localStorage.setItem('products', JSON.stringify(products));
+            localStorage.setItem('movements', JSON.stringify(movements));
+            
+            closeModal('permanentModal');
+            loadProducts();
+            updateDashboard();
+            loadPermanentItems();
+            loadHistory();
+        }
+
+        // CARREGAR ITENS DE BAIXA PERMANENTE
+        function loadPermanentItems() {
+            const permanentItems = JSON.parse(localStorage.getItem('permanent')) || [];
+            const list = document.getElementById('permanentList');
+            
+            if (permanentItems.length > 0) {
+                list.innerHTML = permanentItems.sort((a,b) => b.id - a.id).map(p => `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <h4>${p.productName}</h4>
+                            <p>👤 ${p.userName}</p>
+                            <p>📍 ${p.productLocal}</p>
+                            <small>📅 ${formatDateTime(p.datetime)}</small>
+                            ${p.observation ? `<small>📝 ${p.observation}</small>` : ''}
+                        </div>
+                        <div class="item-status status-archived">
+                            ${p.quantity} unid.
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                list.innerHTML = '<div class="empty-state"><span>🗑️</span><p>Nenhuma baixa registrada</p></div>';
+            }
+        }
+
         // HISTÓRICO
         function loadHistory() {
             const dateFilter = document.getElementById('historyDate').value;
             let filtered = movements;
             if (dateFilter) {
-                filtered = movements.filter(m => m.date === dateFilter);
+                filtered = movements.filter(m => m.datetime.startsWith(dateFilter));
             }
             
             const list = document.getElementById('historyList');
@@ -1491,7 +1507,7 @@
             
             list.innerHTML = filtered.sort((a,b) => b.id - a.id).map(m => {
                 let icon = m.type === 'entry' ? '📥' : m.type === 'exit' ? '📤' : m.type === 'loan' ? '🔧' : m.type === 'return' ? '↩️' : '🗑️';
-                let typeName = m.type === 'entry' ? 'Entrada' : m.type === 'exit' ? 'Saída' : m.type === 'loan' ? 'Empréstimo' : m.type === 'return' ? 'Devolução' : 'Retirada Permanente';
+                let typeName = m.type === 'entry' ? 'Entrada' : m.type === 'exit' ? 'Saída' : m.type === 'loan' ? 'Empréstimo' : m.type === 'return' ? 'Devolução' : 'Baixa Permanente';
                 let color = m.type === 'entry' ? '#16a34a' : m.type === 'exit' ? '#dc2626' : m.type === 'loan' ? '#2563eb' : m.type === 'return' ? '#10b981' : '#f97316';
                 
                 return `
@@ -1499,7 +1515,7 @@
                         <div class="item-info">
                             <h4>${m.productName}</h4>
                             <p>${typeName} • ${m.quantity} unid.</p>
-                            <small>${m.date} ${m.observation ? ' • ' + m.observation : ''}</small>
+                            <small>${formatDateTime(m.datetime)} ${m.observation ? ' • ' + m.observation : ''}</small>
                         </div>
                         <div style="background: ${color}20; color: ${color}; padding: 4px 12px; border-radius: 40px; font-size: 12px; font-weight: 600;">
                             ${icon}
