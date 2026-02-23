@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Estoque</title>
+    <title>HWT Sports</title>
     <style>
         * {
             margin: 0;
@@ -23,7 +23,6 @@
             min-height: 100vh;
         }
 
-        /* Menu Lateral */
         .sidebar {
             width: 260px;
             background: #1a1a1a;
@@ -86,13 +85,11 @@
             font-weight: 500;
         }
 
-        /* Conteúdo Principal */
         .main-content {
             flex: 1;
             padding: 32px;
         }
 
-        /* Header */
         .header {
             background: #1a1a1a;
             border-radius: 20px;
@@ -139,7 +136,6 @@
             background: #fb923c;
         }
 
-        /* Cards de Estatísticas */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -197,7 +193,6 @@
             margin-top: 2px;
         }
 
-        /* Seções */
         .section {
             background: #1a1a1a;
             border-radius: 20px;
@@ -249,7 +244,6 @@
             background: #333 !important;
         }
 
-        /* Listas */
         .list-item {
             display: flex;
             justify-content: space-between;
@@ -442,7 +436,6 @@
             color: #e0e0e0;
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -545,7 +538,6 @@
             flex: 1;
         }
 
-        /* Login */
         .login-container {
             max-width: 380px;
             margin: 120px auto;
@@ -653,7 +645,7 @@
     <!-- Tela de Login -->
     <div id="loginScreen" class="login-container">
         <div class="login-header">
-            <h1>Controle de Estoque</h1>
+            <h1>HWT Sports</h1>
             <p>Faça login para acessar o sistema</p>
         </div>
         <div class="login-form">
@@ -668,7 +660,7 @@
         <!-- Menu Lateral -->
         <div class="sidebar">
             <div class="logo">
-                <h2>Controle de Estoque</h2>
+                <h2>HWT Sports</h2>
                 <p>Menu Principal</p>
             </div>
             
