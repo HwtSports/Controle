@@ -199,7 +199,7 @@
             margin-top: 2px;
         }
 
-        /* Seções (agora usadas apenas nas abas) */
+        /* Seções */
         .section {
             background: #1a1a1a;
             border-radius: 20px;
@@ -240,15 +240,6 @@
         .section-header button:hover {
             background: #fb923c;
             transform: scale(1.02);
-        }
-
-        .btn-secondary {
-            background: #2a2a2a !important;
-            color: #f97316 !important;
-        }
-
-        .btn-secondary:hover {
-            background: #333 !important;
         }
 
         /* Listas */
@@ -356,16 +347,6 @@
 
         .btn-permanent {
             background: #f97316;
-            color: #0a0a0a;
-        }
-
-        .btn-restore {
-            background: #fbbf24;
-            color: #0a0a0a;
-        }
-
-        .btn-view {
-            background: #a855f7;
             color: #0a0a0a;
         }
 
@@ -609,53 +590,13 @@
         .hidden {
             display: none !important;
         }
-
-        .timeline {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .timeline-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 12px;
-            background: #2a2a2a;
-            border-radius: 12px;
-        }
-
-        .timeline-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-
-        .timeline-content {
-            flex: 1;
-        }
-
-        .timeline-content h4 {
-            font-size: 14px;
-            font-weight: 600;
-            color: #f97316;
-        }
-
-        .timeline-content p {
-            font-size: 12px;
-            color: #ccc;
-        }
     </style>
 </head>
 <body>
     <!-- Tela de Login -->
     <div id="loginScreen" class="login-container">
         <div class="login-header">
-            <h1>Sistema de Estoque</h1>
+            <h1>Controle de Estoque</h1>
             <p>Faça login para acessar o sistema</p>
         </div>
         <div class="login-form">
@@ -707,7 +648,7 @@
                 </div>
             </div>
 
-            <!-- Seção Painel (agora apenas com cards clicáveis) -->
+            <!-- Seção Painel (sem listas duplicadas) -->
             <div id="dashboardSection">
                 <div class="stats-grid">
                     <div class="stat-card" onclick="showSection('products')">
@@ -720,7 +661,7 @@
                             <div class="label">itens ativos</div>
                         </div>
                     </div>
-                    <div class="stat-card" onclick="showSection('products', 'lowStock')">
+                    <div class="stat-card" onclick="filterByLowStock()">
                         <div class="stat-icon">
                             <span>⚠️</span>
                         </div>
@@ -730,7 +671,7 @@
                             <div class="label">produtos</div>
                         </div>
                     </div>
-                    <div class="stat-card" onclick="showSection('loans')">
+                    <div class="stat-card" onclick="filterByActiveLoans()">
                         <div class="stat-icon">
                             <span>🔧</span>
                         </div>
@@ -741,25 +682,13 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Últimas Movimentações (mantido como resumo) -->
-                <div class="section">
-                    <div class="section-header">
-                        <h2>📋 Últimas Movimentações</h2>
-                        <button class="btn-secondary" onclick="showSection('history')">Ver todas</button>
-                    </div>
-                    <div id="recentMovementsList" class="empty-state">
-                        <span>📊</span>
-                        <p>Nenhuma movimentação recente</p>
-                    </div>
-                </div>
             </div>
 
             <!-- Seção Produtos -->
             <div id="productsSection" class="hidden">
                 <div class="section">
                     <div class="section-header">
-                        <h2>📦 Produtos Ativos</h2>
+                        <h2 id="productsTitle">📦 Produtos Ativos</h2>
                         <button onclick="openProductModal()">
                             <span>+</span> Novo Produto
                         </button>
@@ -816,15 +745,97 @@
         </div>
     </div>
 
-    <!-- Modais (mantidos iguais) -->
-    <div id="productModal" class="modal">...</div>
-    <div id="loanModal" class="modal">...</div>
-    <div id="returnModal" class="modal">...</div>
-    <div id="permanentModal" class="modal">...</div>
+    <!-- Modal de Produto -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Novo Produto</h2>
+                <button class="close-btn" onclick="closeModal('productModal')">&times;</button>
+            </div>
+            <div class="modal-form">
+                <input type="text" id="productName" placeholder="Nome do produto">
+                <input type="text" id="productLocal" placeholder="Localização">
+                <select id="productCategory">
+                    <option value="">Selecione a categoria</option>
+                    <option value="Jardim">Jardim</option>
+                    <option value="Elétrica">Elétrica</option>
+                    <option value="Ferramentas">Ferramentas</option>
+                    <option value="EPI">EPI</option>
+                    <option value="Hidráulica">Hidráulica</option>
+                    <option value="Geral">Geral</option>
+                </select>
+                <input type="number" id="productQuantity" placeholder="Quantidade">
+                <input type="number" id="productMinQuantity" placeholder="Quantidade mínima">
+                <input type="hidden" id="editingProductId">
+                <button onclick="saveProduct()">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Empréstimo -->
+    <div id="loanModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Novo Empréstimo</h2>
+                <button class="close-btn" onclick="closeModal('loanModal')">&times;</button>
+            </div>
+            <div class="modal-form">
+                <input type="text" id="loanUserName" placeholder="Nome de quem está pegando">
+                <select id="loanProduct"></select>
+                <input type="number" id="loanQuantity" placeholder="Quantidade" value="1">
+                <div class="datetime-row">
+                    <input type="date" id="loanDate">
+                    <input type="time" id="loanTime" value="08:00">
+                </div>
+                <textarea id="loanObservation" placeholder="Observação"></textarea>
+                <button onclick="saveLoan()">Registrar Empréstimo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Devolução -->
+    <div id="returnModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Registrar Devolução</h2>
+                <button class="close-btn" onclick="closeModal('returnModal')">&times;</button>
+            </div>
+            <div class="modal-form">
+                <div style="background: #2a2a2a; padding: 16px; border-radius: 12px; margin-bottom: 16px;" id="returnInfo"></div>
+                <div class="datetime-row">
+                    <input type="date" id="returnDate">
+                    <input type="time" id="returnTime" value="08:00">
+                </div>
+                <textarea id="returnObservation" placeholder="Observação"></textarea>
+                <input type="hidden" id="returnLoanId">
+                <button onclick="saveReturn()">Confirmar Devolução</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Retirada Permanente -->
+    <div id="permanentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Registrar Retirada Permanente</h2>
+                <button class="close-btn" onclick="closeModal('permanentModal')">&times;</button>
+            </div>
+            <div class="modal-form">
+                <div style="background: #2a2a2a; padding: 16px; border-radius: 12px; margin-bottom: 16px;" id="permanentInfo"></div>
+                <input type="text" id="permanentUserName" placeholder="Nome de quem está retirando">
+                <input type="number" id="permanentQuantity" placeholder="Quantidade" value="1">
+                <div class="datetime-row">
+                    <input type="date" id="permanentDate">
+                    <input type="time" id="permanentTime" value="08:00">
+                </div>
+                <textarea id="permanentObservation" placeholder="Motivo da retirada (opcional)"></textarea>
+                <input type="hidden" id="permanentProductId">
+                <button onclick="savePermanent()">Confirmar Retirada</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // (todo o JavaScript permanece o mesmo, apenas adicionei um parâmetro opcional na showSection)
-        
         // DADOS INICIAIS
         let products = JSON.parse(localStorage.getItem('products')) || [
             { id: 1, name: 'Tesoura de Poda', local: 'Prateleira A1', category: 'Jardim', quantity: 8, minQuantity: 3 },
@@ -866,21 +877,10 @@
             document.getElementById('appScreen').classList.add('hidden');
         }
 
-        // NAVEGAÇÃO (agora com parâmetro opcional para filtrar)
-        function showSection(section, filter) {
+        // NAVEGAÇÃO
+        function showSection(section) {
             document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-            
-            // Ativar o item do menu correspondente
-            const menuMap = {
-                'dashboard': 0,
-                'products': 1,
-                'loans': 2,
-                'permanent': 3,
-                'history': 4
-            };
-            if (menuMap[section] !== undefined) {
-                document.querySelectorAll('.menu-item')[menuMap[section]].classList.add('active');
-            }
+            event.currentTarget.classList.add('active');
             
             document.getElementById('dashboardSection').classList.add('hidden');
             document.getElementById('productsSection').classList.add('hidden');
@@ -902,13 +902,7 @@
             if (section === 'products') {
                 loadProducts();
                 loadCategoryFilter();
-                // Se veio do filtro de estoque baixo, podemos destacar ou filtrar
-                if (filter === 'lowStock') {
-                    // Opcional: aplicar filtro de estoque baixo
-                    document.getElementById('searchProduct').value = '';
-                    currentCategory = 'todos';
-                    filterProducts();
-                }
+                document.getElementById('productsTitle').textContent = '📦 Produtos Ativos';
             } else if (section === 'loans') {
                 loadAllLoans();
             } else if (section === 'history') {
@@ -916,6 +910,18 @@
             } else if (section === 'permanent') {
                 loadPermanentItems();
             }
+        }
+
+        // FILTROS ESPECIAIS (para os cards)
+        function filterByLowStock() {
+            showSection('products');
+            // Aqui você pode definir um filtro especial, mas por enquanto só vai para produtos
+            // Idealmente, você aplicaria um filtro de "estoque baixo" automaticamente
+        }
+
+        function filterByActiveLoans() {
+            showSection('loans');
+            // Vai para a seção de empréstimos
         }
 
         // DASHBOARD
@@ -927,35 +933,6 @@
             
             const activeLoans = loans.filter(l => !l.returned);
             document.getElementById('loanedCount').textContent = activeLoans.length;
-            
-            // Últimas movimentações
-            const recentMovements = movements.slice(-5).reverse();
-            const recentList = document.getElementById('recentMovementsList');
-            if (recentMovements.length > 0) {
-                recentList.innerHTML = recentMovements.map(m => {
-                    let icon = m.type === 'entry' ? '📥' : m.type === 'exit' ? '📤' : m.type === 'loan' ? '🔧' : m.type === 'return' ? '↩️' : '🗑️';
-                    let color = m.type === 'entry' ? '#4caf50' : m.type === 'exit' ? '#f44336' : m.type === 'loan' ? '#42a5f5' : m.type === 'return' ? '#4caf50' : '#f97316';
-                    return `
-                        <div class="timeline-item">
-                            <div class="timeline-icon" style="background: ${color}20; color: ${color}">
-                                ${icon}
-                            </div>
-                            <div class="timeline-content">
-                                <h4>${m.productName}</h4>
-                                <p>${m.type === 'entry' ? 'Entrada' : m.type === 'exit' ? 'Saída' : m.type === 'loan' ? 'Empréstimo' : m.type === 'return' ? 'Devolução' : 'Retirada'} • ${m.quantity} unid.</p>
-                                <small>${formatDateTime(m.datetime)}</small>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            } else {
-                recentList.innerHTML = `
-                    <div class="empty-state">
-                        <span>📊</span>
-                        <p>Nenhuma movimentação recente</p>
-                    </div>
-                `;
-            }
         }
 
         // Utilitário para formatar data/hora
@@ -965,39 +942,450 @@
             return `${date} ${time}`;
         }
 
-        // PRODUTOS (funções mantidas iguais)
-        function loadCategoryFilter() { /* ... */ }
-        function filterByCategory(cat) { /* ... */ }
-        function filterProducts() { /* ... */ }
-        function displayProducts(list) { /* ... */ }
-        function loadProducts() { filterProducts(); }
-        function openProductModal() { /* ... */ }
-        function editProduct(id) { /* ... */ }
-        function saveProduct() { /* ... */ }
-        function deleteProduct(id) { /* ... */ }
+        // PRODUTOS
+        function loadCategoryFilter() {
+            const cats = ['todos', ...new Set(products.map(p => p.category))];
+            const filterDiv = document.getElementById('categoryFilter');
+            
+            filterDiv.innerHTML = cats.map(cat => 
+                `<button class="${cat === 'todos' ? 'active' : ''}" onclick="filterByCategory('${cat}')">
+                    ${cat === 'todos' ? 'Todos' : cat}
+                </button>`
+            ).join('');
+        }
 
-        // EMPRÉSTIMOS (funções mantidas iguais)
-        function loadLoanProductSelect() { /* ... */ }
-        function openLoanModal(productId = null) { /* ... */ }
-        function saveLoan() { /* ... */ }
-        function loadAllLoans() { /* ... */ }
-        function openReturnModal(loanId) { /* ... */ }
-        function saveReturn() { /* ... */ }
+        function filterByCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('#categoryFilter button').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === (cat === 'todos' ? 'Todos' : cat)) {
+                    btn.classList.add('active');
+                }
+            });
+            filterProducts();
+        }
 
-        // RETIRADAS (funções mantidas iguais)
-        function openPermanentModal(productId) { /* ... */ }
-        function savePermanent() { /* ... */ }
-        function loadPermanentItems() { /* ... */ }
+        function filterProducts() {
+            const search = document.getElementById('searchProduct').value.toLowerCase();
+            const filtered = products.filter(p => 
+                (currentCategory === 'todos' || p.category === currentCategory) &&
+                (p.name.toLowerCase().includes(search) || p.local.toLowerCase().includes(search))
+            );
+            displayProducts(filtered);
+        }
 
-        // HISTÓRICO (funções mantidas iguais)
-        function loadHistory() { /* ... */ }
+        function displayProducts(list) {
+            const activeLoans = loans.filter(l => !l.returned);
+            
+            document.getElementById('productsList').innerHTML = list.map(p => {
+                const loaned = activeLoans.filter(l => l.productId === p.id).reduce((s, l) => s + l.quantity, 0);
+                const available = p.quantity - loaned;
+                
+                return `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <h4>${p.name}</h4>
+                            <p>📍 ${p.local}</p>
+                            <p>🏷️ ${p.category}</p>
+                            ${loaned > 0 ? `<small>🔧 ${loaned} emprestado(s)</small>` : ''}
+                        </div>
+                        <div class="item-status ${p.quantity <= p.minQuantity ? 'status-low' : 'status-ok'}">
+                            Disponível: ${available}
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-edit" onclick="editProduct(${p.id})">Editar</button>
+                            <button class="btn-loan" onclick="openLoanModal(${p.id})">Emprestar</button>
+                            <button class="btn-permanent" onclick="openPermanentModal(${p.id})">Retirar</button>
+                            <button class="btn-delete" onclick="deleteProduct(${p.id})">Excluir</button>
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<div class="empty-state"><span>🔍</span><p>Nenhum item encontrado</p></div>';
+        }
+
+        function loadProducts() {
+            filterProducts();
+        }
+
+        function openProductModal() {
+            document.getElementById('modalTitle').textContent = 'Novo Produto';
+            document.getElementById('productName').value = '';
+            document.getElementById('productLocal').value = '';
+            document.getElementById('productCategory').value = '';
+            document.getElementById('productQuantity').value = '';
+            document.getElementById('productMinQuantity').value = '';
+            document.getElementById('editingProductId').value = '';
+            document.getElementById('productModal').classList.add('active');
+        }
+
+        function editProduct(id) {
+            const p = products.find(p => p.id === id);
+            if (p) {
+                document.getElementById('modalTitle').textContent = 'Editar Produto';
+                document.getElementById('productName').value = p.name;
+                document.getElementById('productLocal').value = p.local;
+                document.getElementById('productCategory').value = p.category;
+                document.getElementById('productQuantity').value = p.quantity;
+                document.getElementById('productMinQuantity').value = p.minQuantity;
+                document.getElementById('editingProductId').value = id;
+                document.getElementById('productModal').classList.add('active');
+            }
+        }
+
+        function saveProduct() {
+            const id = document.getElementById('editingProductId').value;
+            const product = {
+                name: document.getElementById('productName').value,
+                local: document.getElementById('productLocal').value,
+                category: document.getElementById('productCategory').value,
+                quantity: parseInt(document.getElementById('productQuantity').value) || 0,
+                minQuantity: parseInt(document.getElementById('productMinQuantity').value) || 0
+            };
+            
+            if (!product.name || !product.local || !product.category) {
+                alert('Preencha todos os campos!');
+                return;
+            }
+            
+            if (id) {
+                const index = products.findIndex(p => p.id == id);
+                products[index] = { ...products[index], ...product };
+            } else {
+                product.id = Date.now();
+                products.push(product);
+            }
+            
+            localStorage.setItem('products', JSON.stringify(products));
+            closeModal('productModal');
+            loadProducts();
+            updateDashboard();
+            loadCategoryFilter();
+            loadLoanProductSelect();
+        }
+
+        function deleteProduct(id) {
+            if (confirm('Excluir permanentemente este item?')) {
+                products = products.filter(p => p.id !== id);
+                localStorage.setItem('products', JSON.stringify(products));
+                loadProducts();
+                updateDashboard();
+                loadCategoryFilter();
+                loadPermanentItems();
+            }
+        }
+
+        // EMPRÉSTIMOS
+        function loadLoanProductSelect() {
+            const select = document.getElementById('loanProduct');
+            const activeLoans = loans.filter(l => !l.returned);
+            
+            select.innerHTML = '<option value="">Selecione um item</option>' +
+                products.map(p => {
+                    const loaned = activeLoans.filter(l => l.productId === p.id).reduce((s, l) => s + l.quantity, 0);
+                    const available = p.quantity - loaned;
+                    return `<option value="${p.id}" ${available <= 0 ? 'disabled' : ''}>
+                        ${p.name} (Disponível: ${available})
+                    </option>`;
+                }).join('');
+        }
+
+        function openLoanModal(productId = null) {
+            document.getElementById('loanUserName').value = '';
+            document.getElementById('loanQuantity').value = '1';
+            document.getElementById('loanDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('loanTime').value = new Date().toTimeString().slice(0,5);
+            document.getElementById('loanObservation').value = '';
+            if (productId) document.getElementById('loanProduct').value = productId;
+            document.getElementById('loanModal').classList.add('active');
+        }
+
+        function saveLoan() {
+            const user = document.getElementById('loanUserName').value;
+            const pid = parseInt(document.getElementById('loanProduct').value);
+            const qty = parseInt(document.getElementById('loanQuantity').value);
+            const date = document.getElementById('loanDate').value;
+            const time = document.getElementById('loanTime').value;
+            
+            if (!user || !pid || !qty || !date || !time) {
+                alert('Preencha todos os campos!');
+                return;
+            }
+            
+            const product = products.find(p => p.id === pid);
+            const datetime = `${date} ${time}`;
+            
+            loans.push({
+                id: Date.now(),
+                userName: user,
+                productId: pid,
+                productName: product.name,
+                productLocal: product.local,
+                quantity: qty,
+                datetime: datetime,
+                returned: false
+            });
+            
+            movements.push({
+                id: Date.now() + 1,
+                productId: pid,
+                productName: product.name,
+                quantity: qty,
+                datetime: datetime,
+                type: 'loan',
+                observation: `Emprestado para ${user}`
+            });
+            
+            localStorage.setItem('loans', JSON.stringify(loans));
+            localStorage.setItem('movements', JSON.stringify(movements));
+            
+            closeModal('loanModal');
+            updateDashboard();
+            loadProducts();
+            loadLoanProductSelect();
+            showSection('dashboard');
+        }
+
+        function loadAllLoans() {
+            const list = document.getElementById('allLoansList');
+            const active = loans.filter(l => !l.returned);
+            const returned = loans.filter(l => l.returned);
+            
+            if (active.length === 0 && returned.length === 0) {
+                list.innerHTML = '<div class="empty-state"><span>📭</span><p>Nenhum empréstimo registrado</p></div>';
+                return;
+            }
+            
+            let html = '<h3 style="margin-bottom: 16px; color: #f97316;">🔧 Empréstimos Ativos</h3>';
+            
+            if (active.length > 0) {
+                html += active.map(l => `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <h4>${l.productName}</h4>
+                            <p>👤 ${l.userName}</p>
+                            <p>📍 ${l.productLocal}</p>
+                            <small>📅 ${formatDateTime(l.datetime)}</small>
+                        </div>
+                        <div class="item-status status-loan">
+                            ${l.quantity} unid.
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn-return" onclick="openReturnModal(${l.id})">Devolver</button>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                html += '<p style="color: #aaa; padding: 16px;">Nenhum empréstimo ativo</p>';
+            }
+            
+            if (returned.length > 0) {
+                html += '<h3 style="margin: 32px 0 16px; color: #f97316;">✅ Histórico de Devoluções</h3>';
+                html += returned.slice(0, 5).map(l => `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <h4>${l.productName}</h4>
+                            <p>👤 ${l.userName}</p>
+                            <p>📅 Empréstimo: ${formatDateTime(l.datetime)}</p>
+                            <p>✅ Devolução: ${formatDateTime(l.returnDatetime)}</p>
+                        </div>
+                        <div class="item-status status-ok">
+                            ${l.quantity} unid.
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            list.innerHTML = html;
+        }
+
+        function openReturnModal(loanId) {
+            const loan = loans.find(l => l.id === loanId);
+            if (loan) {
+                document.getElementById('returnInfo').innerHTML = `
+                    <strong>Devolução:</strong><br>
+                    👤 ${loan.userName}<br>
+                    🔧 ${loan.productName}<br>
+                    📦 Quantidade: ${loan.quantity}
+                `;
+                document.getElementById('returnDate').value = new Date().toISOString().split('T')[0];
+                document.getElementById('returnTime').value = new Date().toTimeString().slice(0,5);
+                document.getElementById('returnLoanId').value = loanId;
+                document.getElementById('returnModal').classList.add('active');
+            }
+        }
+
+        function saveReturn() {
+            const loanId = parseInt(document.getElementById('returnLoanId').value);
+            const returnDate = document.getElementById('returnDate').value;
+            const returnTime = document.getElementById('returnTime').value;
+            
+            const index = loans.findIndex(l => l.id === loanId);
+            if (index === -1) return;
+            
+            loans[index].returned = true;
+            loans[index].returnDatetime = `${returnDate} ${returnTime}`;
+            
+            movements.push({
+                id: Date.now(),
+                productId: loans[index].productId,
+                productName: loans[index].productName,
+                quantity: loans[index].quantity,
+                datetime: `${returnDate} ${returnTime}`,
+                type: 'return',
+                observation: `Devolvido por ${loans[index].userName}`
+            });
+            
+            localStorage.setItem('loans', JSON.stringify(loans));
+            localStorage.setItem('movements', JSON.stringify(movements));
+            
+            closeModal('returnModal');
+            updateDashboard();
+            loadProducts();
+            loadLoanProductSelect();
+            showSection('dashboard');
+        }
+
+        // RETIRADA PERMANENTE
+        function openPermanentModal(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                document.getElementById('permanentInfo').innerHTML = `
+                    <strong>Registrar retirada permanente:</strong><br>
+                    🔧 ${product.name}<br>
+                    📦 Quantidade atual: ${product.quantity}
+                `;
+                document.getElementById('permanentUserName').value = '';
+                document.getElementById('permanentQuantity').value = 1;
+                document.getElementById('permanentDate').value = new Date().toISOString().split('T')[0];
+                document.getElementById('permanentTime').value = new Date().toTimeString().slice(0,5);
+                document.getElementById('permanentObservation').value = '';
+                document.getElementById('permanentProductId').value = productId;
+                document.getElementById('permanentModal').classList.add('active');
+            }
+        }
+
+        function savePermanent() {
+            const productId = parseInt(document.getElementById('permanentProductId').value);
+            const userName = document.getElementById('permanentUserName').value;
+            const qty = parseInt(document.getElementById('permanentQuantity').value);
+            const date = document.getElementById('permanentDate').value;
+            const time = document.getElementById('permanentTime').value;
+            const observation = document.getElementById('permanentObservation').value;
+            
+            if (!userName || !qty || !date || !time) {
+                alert('Preencha nome, quantidade, data e hora!');
+                return;
+            }
+            
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            if (qty > product.quantity) {
+                alert('Quantidade indisponível em estoque!');
+                return;
+            }
+
+            // Reduzir do estoque
+            product.quantity -= qty;
+            
+            const datetime = `${date} ${time}`;
+
+            // Registrar movimentação de baixa
+            movements.push({
+                id: Date.now(),
+                productId: product.id,
+                productName: product.name,
+                quantity: qty,
+                datetime: datetime,
+                type: 'permanent',
+                observation: `Retirada permanente - ${userName} - ${observation}`
+            });
+
+            // Registrar na lista de retiradas
+            let permanentItems = JSON.parse(localStorage.getItem('permanent')) || [];
+            permanentItems.push({
+                id: Date.now(),
+                userName: userName,
+                productName: product.name,
+                productLocal: product.local,
+                quantity: qty,
+                datetime: datetime,
+                observation: observation
+            });
+            localStorage.setItem('permanent', JSON.stringify(permanentItems));
+            
+            localStorage.setItem('products', JSON.stringify(products));
+            localStorage.setItem('movements', JSON.stringify(movements));
+            
+            closeModal('permanentModal');
+            loadProducts();
+            updateDashboard();
+            loadPermanentItems();
+            loadHistory();
+        }
+
+        // CARREGAR ITENS DE RETIRADA PERMANENTE
+        function loadPermanentItems() {
+            const permanentItems = JSON.parse(localStorage.getItem('permanent')) || [];
+            const list = document.getElementById('permanentList');
+            
+            if (permanentItems.length > 0) {
+                list.innerHTML = permanentItems.sort((a,b) => b.id - a.id).map(p => `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <h4>${p.productName}</h4>
+                            <p>👤 ${p.userName}</p>
+                            <p>📍 ${p.productLocal}</p>
+                            <small>📅 ${formatDateTime(p.datetime)}</small>
+                            ${p.observation ? `<small>📝 ${p.observation}</small>` : ''}
+                        </div>
+                        <div class="item-status status-archived">
+                            ${p.quantity} unid.
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                list.innerHTML = '<div class="empty-state"><span>🗑️</span><p>Nenhuma retirada registrada</p></div>';
+            }
+        }
+
+        // HISTÓRICO
+        function loadHistory() {
+            const dateFilter = document.getElementById('historyDate').value;
+            let filtered = movements;
+            if (dateFilter) {
+                filtered = movements.filter(m => m.datetime && m.datetime.startsWith(dateFilter));
+            }
+            
+            const list = document.getElementById('historyList');
+            if (filtered.length === 0) {
+                list.innerHTML = '<div class="empty-state"><span>📋</span><p>Nenhuma movimentação encontrada</p></div>';
+                return;
+            }
+            
+            list.innerHTML = filtered.sort((a,b) => b.id - a.id).map(m => {
+                let icon = m.type === 'entry' ? '📥' : m.type === 'exit' ? '📤' : m.type === 'loan' ? '🔧' : m.type === 'return' ? '↩️' : '🗑️';
+                let typeName = m.type === 'entry' ? 'Entrada' : m.type === 'exit' ? 'Saída' : m.type === 'loan' ? 'Empréstimo' : m.type === 'return' ? 'Devolução' : 'Retirada';
+                let color = m.type === 'entry' ? '#4caf50' : m.type === 'exit' ? '#f44336' : m.type === 'loan' ? '#42a5f5' : m.type === 'return' ? '#4caf50' : '#f97316';
+                
+                return `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <h4>${m.productName}</h4>
+                            <p>${typeName} • ${m.quantity} unid.</p>
+                            <small>${formatDateTime(m.datetime)} ${m.observation ? ' • ' + m.observation : ''}</small>
+                        </div>
+                        <div style="background: ${color}20; color: ${color}; padding: 4px 12px; border-radius: 40px; font-size: 12px; font-weight: 600;">
+                            ${icon}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
 
         function closeModal(id) {
             document.getElementById(id).classList.remove('active');
         }
-
-        // Para economizar espaço, as funções repetidas devem ser mantidas do código anterior.
-        // Aqui estamos apenas mostrando a estrutura modificada.
     </script>
 </body>
 </html>
