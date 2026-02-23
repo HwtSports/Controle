@@ -9,11 +9,11 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f3f4f6;
             min-height: 100vh;
         }
 
@@ -25,145 +25,153 @@
 
         /* Menu Lateral */
         .sidebar {
-            width: 250px;
+            width: 260px;
             background: white;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-            padding: 30px 0;
+            box-shadow: 2px 0 12px rgba(0,0,0,0.03);
+            padding: 32px 0;
             position: fixed;
             height: 100vh;
             overflow-y: auto;
             z-index: 100;
+            border-right: 1px solid #f0f0f0;
         }
 
         .logo {
-            padding: 0 20px 30px 20px;
+            padding: 0 24px 32px 24px;
             border-bottom: 1px solid #f0f0f0;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .logo h2 {
-            color: #333;
+            color: #1e293b;
             font-size: 20px;
-            font-weight: 600;
+            font-weight: 700;
+            letter-spacing: -0.02em;
         }
 
         .logo p {
-            color: #667eea;
-            font-size: 14px;
-            margin-top: 5px;
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 4px;
         }
 
         .menu-item {
             display: flex;
             align-items: center;
-            padding: 15px 25px;
-            color: #666;
+            padding: 12px 24px;
+            color: #64748b;
             text-decoration: none;
-            transition: all 0.3s;
+            transition: all 0.2s;
             cursor: pointer;
-            border-left: 4px solid transparent;
+            border-left: 3px solid transparent;
+            margin: 4px 0;
         }
 
         .menu-item:hover {
-            background: #f8f9fa;
-            color: #667eea;
+            background: #f8fafc;
+            color: #3b82f6;
         }
 
         .menu-item.active {
-            background: #f0f3ff;
-            color: #667eea;
-            border-left-color: #667eea;
+            background: #f0f9ff;
+            color: #3b82f6;
+            border-left-color: #3b82f6;
         }
 
         .menu-item span {
             font-size: 20px;
-            margin-right: 15px;
+            margin-right: 14px;
         }
 
         .menu-item .menu-text {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
         }
 
         /* Conteúdo Principal */
         .main-content {
             flex: 1;
-            margin-left: 250px;
-            padding: 30px;
+            margin-left: 260px;
+            padding: 32px;
             min-height: 100vh;
         }
 
         /* Header */
         .header {
             background: white;
-            border-radius: 15px;
-            padding: 20px 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            padding: 24px 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border: 1px solid #f0f0f0;
         }
 
         .header h1 {
-            color: #333;
+            color: #1e293b;
             font-size: 24px;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 24px;
         }
 
         .user-name {
-            color: #666;
+            color: #475569;
             font-weight: 500;
+            font-size: 14px;
         }
 
         .logout-btn {
-            background: #e74c3c;
+            background: #ef4444;
             color: white;
             border: none;
             padding: 8px 20px;
-            border-radius: 8px;
+            border-radius: 40px;
             cursor: pointer;
             font-weight: 500;
-            transition: background 0.3s;
+            font-size: 13px;
+            transition: all 0.2s;
         }
 
         .logout-btn:hover {
-            background: #c0392b;
+            background: #dc2626;
         }
 
         /* Cards de Estatísticas */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
         }
 
         .stat-card {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
             display: flex;
             align-items: center;
-            transition: transform 0.3s;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid #f0f0f0;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.04);
         }
 
         .stat-icon {
-            width: 60px;
-            height: 60px;
-            background: #f0f3ff;
-            border-radius: 12px;
+            width: 56px;
+            height: 56px;
+            background: #f0f9ff;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -171,74 +179,78 @@
         }
 
         .stat-icon span {
-            font-size: 30px;
+            font-size: 28px;
         }
 
         .stat-info h3 {
-            color: #666;
-            font-size: 14px;
+            color: #64748b;
+            font-size: 13px;
             font-weight: 500;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         .stat-info .number {
-            color: #333;
+            color: #1e293b;
             font-size: 28px;
             font-weight: 700;
         }
 
         .stat-info .label {
-            color: #999;
+            color: #94a3b8;
             font-size: 12px;
-            margin-top: 3px;
+            margin-top: 2px;
         }
 
         /* Seções */
         .section {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            border: 1px solid #f0f0f0;
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .section-header h2 {
-            color: #333;
+            color: #1e293b;
             font-size: 18px;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .section-header button {
-            background: #667eea;
+            background: #3b82f6;
             color: white;
             border: none;
             padding: 10px 20px;
-            border-radius: 8px;
+            border-radius: 40px;
             cursor: pointer;
             font-weight: 500;
+            font-size: 13px;
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: background 0.3s;
+            transition: all 0.2s;
         }
 
         .section-header button:hover {
-            background: #5a67d8;
+            background: #2563eb;
+            transform: scale(1.02);
         }
 
-        .btn-archive {
-            background: #6c757d !important;
+        .btn-secondary {
+            background: #f1f5f9 !important;
+            color: #1e293b !important;
         }
 
-        .btn-archive:hover {
-            background: #5a6268 !important;
+        .btn-secondary:hover {
+            background: #e2e8f0 !important;
         }
 
         /* Listas */
@@ -246,9 +258,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #f0f0f0;
-            transition: background 0.3s;
+            padding: 16px;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background 0.2s;
         }
 
         .list-item:last-child {
@@ -256,179 +268,180 @@
         }
 
         .list-item:hover {
-            background: #f8f9fa;
+            background: #f8fafc;
+            border-radius: 12px;
         }
 
         .item-info h4 {
-            color: #333;
+            color: #1e293b;
             font-size: 16px;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         .item-info p {
-            color: #666;
+            color: #64748b;
             font-size: 13px;
         }
 
         .item-info small {
-            color: #999;
+            color: #94a3b8;
             font-size: 12px;
         }
 
         .item-status {
-            padding: 5px 12px;
-            border-radius: 20px;
+            padding: 4px 12px;
+            border-radius: 40px;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .status-low {
-            background: #fee7e7;
-            color: #e74c3c;
+            background: #fee2e2;
+            color: #dc2626;
         }
 
         .status-ok {
-            background: #e6f7e6;
-            color: #27ae60;
+            background: #dcfce7;
+            color: #16a34a;
         }
 
         .status-loan {
-            background: #e1f5fe;
-            color: #17a2b8;
+            background: #dbeafe;
+            color: #2563eb;
         }
 
         .status-archived {
-            background: #e9ecef;
-            color: #6c757d;
+            background: #f1f5f9;
+            color: #475569;
         }
 
         .item-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .item-actions button {
-            padding: 5px 12px;
+            padding: 6px 12px;
             border: none;
-            border-radius: 5px;
+            border-radius: 40px;
             cursor: pointer;
             font-size: 12px;
             font-weight: 500;
-            transition: opacity 0.3s;
+            transition: all 0.2s;
         }
 
         .item-actions button:hover {
-            opacity: 0.8;
+            transform: translateY(-2px);
+            filter: brightness(0.95);
         }
 
         .btn-edit {
-            background: #3498db;
-            color: white;
+            background: #e2e8f0;
+            color: #1e293b;
         }
 
         .btn-loan {
-            background: #17a2b8;
+            background: #3b82f6;
             color: white;
         }
 
         .btn-delete {
-            background: #e74c3c;
+            background: #ef4444;
             color: white;
         }
 
         .btn-return {
-            background: #28a745;
+            background: #10b981;
             color: white;
         }
 
-        .btn-archive-item {
-            background: #6c757d;
+        .btn-permanent {
+            background: #f97316;
             color: white;
         }
 
         .btn-restore {
-            background: #ffc107;
-            color: #333;
+            background: #fbbf24;
+            color: #1e293b;
+        }
+
+        .btn-view {
+            background: #a855f7;
+            color: white;
         }
 
         /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 40px;
-            color: #999;
+            padding: 48px 20px;
+            color: #94a3b8;
         }
 
         .empty-state span {
-            font-size: 50px;
+            font-size: 48px;
             display: block;
-            margin-bottom: 15px;
-            opacity: 0.5;
+            margin-bottom: 16px;
+            opacity: 0.6;
         }
 
         .empty-state p {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         /* Filtros */
         .filters {
             display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 16px;
+            margin-bottom: 24px;
             flex-wrap: wrap;
         }
 
         .search-box {
             flex: 1;
             min-width: 250px;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 40px;
             font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #3b82f6;
         }
 
         .category-filter {
             display: flex;
             gap: 8px;
             overflow-x: auto;
-            padding: 5px 0;
+            padding: 4px 0;
         }
 
         .category-filter button {
-            padding: 8px 15px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 20px;
-            background: #f0f0f0;
-            color: #666;
+            border-radius: 40px;
+            background: #f1f5f9;
+            color: #475569;
             font-weight: 500;
             font-size: 13px;
             cursor: pointer;
             white-space: nowrap;
+            transition: all 0.2s;
         }
 
         .category-filter button.active {
-            background: #667eea;
+            background: #3b82f6;
             color: white;
         }
 
-        .view-toggle {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 20px;
-        }
-
-        .view-toggle button {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 8px;
-            background: #f0f0f0;
-            color: #666;
-            cursor: pointer;
-        }
-
-        .view-toggle button.active {
-            background: #667eea;
-            color: white;
+        .date-filter {
+            padding: 10px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 40px;
+            font-size: 13px;
         }
 
         /* Modal */
@@ -443,6 +456,7 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            backdrop-filter: blur(4px);
         }
 
         .modal.active {
@@ -451,24 +465,26 @@
 
         .modal-content {
             background: white;
-            border-radius: 15px;
-            padding: 30px;
+            border-radius: 24px;
+            padding: 32px;
             max-width: 500px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .modal-header h2 {
-            color: #333;
+            color: #1e293b;
             font-size: 20px;
+            font-weight: 700;
         }
 
         .close-btn {
@@ -476,59 +492,74 @@
             border: none;
             font-size: 24px;
             cursor: pointer;
-            color: #999;
+            color: #94a3b8;
         }
 
         .modal-form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 16px;
         }
 
         .modal-form input,
         .modal-form select,
         .modal-form textarea {
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            padding: 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
             font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .modal-form input:focus,
+        .modal-form select:focus,
+        .modal-form textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
         }
 
         .modal-form button {
-            background: #27ae60;
+            background: #3b82f6;
             color: white;
             border: none;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 16px;
+            border-radius: 12px;
             font-weight: 600;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 8px;
+            transition: background 0.2s;
+        }
+
+        .modal-form button:hover {
+            background: #2563eb;
         }
 
         /* Login */
         .login-container {
-            max-width: 400px;
-            margin: 100px auto;
+            max-width: 380px;
+            margin: 120px auto;
             background: white;
-            border-radius: 15px;
+            border-radius: 32px;
             padding: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
         }
 
         .login-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 32px;
         }
 
         .login-header h1 {
-            color: #333;
+            color: #1e293b;
             font-size: 28px;
-            margin-bottom: 10px;
+            font-weight: 700;
+            margin-bottom: 8px;
         }
 
         .login-header p {
-            color: #666;
+            color: #64748b;
             font-size: 14px;
         }
 
@@ -539,25 +570,71 @@
         }
 
         .login-form input {
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 15px;
         }
 
         .login-form button {
-            background: #667eea;
+            background: #3b82f6;
             color: white;
             border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .login-form button:hover {
+            background: #2563eb;
         }
 
         .hidden {
             display: none !important;
+        }
+
+        /* Timeline de movimentações */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .timeline-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-content h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .timeline-content p {
+            font-size: 12px;
+            color: #64748b;
         }
     </style>
 </head>
@@ -596,9 +673,13 @@
                 <span>🔧</span>
                 <span class="menu-text">Empréstimos</span>
             </div>
+            <div class="menu-item" onclick="showSection('history')">
+                <span>📋</span>
+                <span class="menu-text">Histórico</span>
+            </div>
             <div class="menu-item" onclick="showSection('archived')">
                 <span>📦</span>
-                <span class="menu-text">Itens Arquivados</span>
+                <span class="menu-text">Arquivados</span>
             </div>
         </div>
 
@@ -670,6 +751,17 @@
                         <p>Nenhum empréstimo ativo</p>
                     </div>
                 </div>
+
+                <!-- Últimas Movimentações -->
+                <div class="section">
+                    <div class="section-header">
+                        <h2>📋 Últimas Movimentações</h2>
+                    </div>
+                    <div id="recentMovementsList" class="empty-state">
+                        <span>📊</span>
+                        <p>Nenhuma movimentação recente</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Seção Produtos -->
@@ -705,12 +797,26 @@
                 </div>
             </div>
 
-            <!-- Seção Itens Arquivados -->
+            <!-- Seção Histórico -->
+            <div id="historySection" class="hidden">
+                <div class="section">
+                    <div class="section-header">
+                        <h2>📋 Histórico de Movimentações</h2>
+                        <div>
+                            <input type="date" id="historyDate" class="date-filter" onchange="loadHistory()">
+                        </div>
+                    </div>
+
+                    <div id="historyList"></div>
+                </div>
+            </div>
+
+            <!-- Seção Itens Arquivados (baixa permanente) -->
             <div id="archivedSection" class="hidden">
                 <div class="section">
                     <div class="section-header">
-                        <h2>📦 Itens Arquivados</h2>
-                        <p style="color: #666;">Itens que não serão mais utilizados</p>
+                        <h2>📦 Itens com Baixa Permanente</h2>
+                        <p style="color: #64748b;">Itens que foram retirados para uso único e não serão devolvidos</p>
                     </div>
 
                     <div id="archivedList"></div>
@@ -759,7 +865,7 @@
                 <input type="number" id="loanQuantity" placeholder="Quantidade" value="1">
                 <input type="date" id="loanDate">
                 <textarea id="loanObservation" placeholder="Observação"></textarea>
-                <button onclick="saveLoan()">Registrar</button>
+                <button onclick="saveLoan()">Registrar Empréstimo</button>
             </div>
         </div>
     </div>
@@ -772,11 +878,28 @@
                 <button class="close-btn" onclick="closeModal('returnModal')">&times;</button>
             </div>
             <div class="modal-form">
-                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;" id="returnInfo"></div>
+                <div style="background: #f8fafc; padding: 16px; border-radius: 12px; margin-bottom: 16px;" id="returnInfo"></div>
                 <input type="date" id="returnDate">
                 <textarea id="returnObservation" placeholder="Observação"></textarea>
                 <input type="hidden" id="returnLoanId">
-                <button onclick="saveReturn()">Confirmar</button>
+                <button onclick="saveReturn()">Confirmar Devolução</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Baixa Permanente -->
+    <div id="permanentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Registrar Baixa Permanente</h2>
+                <button class="close-btn" onclick="closeModal('permanentModal')">&times;</button>
+            </div>
+            <div class="modal-form">
+                <div style="background: #f8fafc; padding: 16px; border-radius: 12px; margin-bottom: 16px;" id="permanentInfo"></div>
+                <input type="date" id="permanentDate">
+                <textarea id="permanentObservation" placeholder="Motivo da baixa (opcional)"></textarea>
+                <input type="hidden" id="permanentProductId">
+                <button onclick="savePermanent()">Confirmar Baixa</button>
             </div>
         </div>
     </div>
@@ -811,6 +934,7 @@
                 loadCategoryFilter();
                 loadLoanProductSelect();
                 loadArchivedItems();
+                loadHistory();
             } else {
                 alert('Usuário ou senha incorretos! Use admin / 123456');
             }
@@ -830,6 +954,7 @@
             document.getElementById('dashboardSection').classList.add('hidden');
             document.getElementById('productsSection').classList.add('hidden');
             document.getElementById('loansSection').classList.add('hidden');
+            document.getElementById('historySection').classList.add('hidden');
             document.getElementById('archivedSection').classList.add('hidden');
             
             document.getElementById(section + 'Section').classList.remove('hidden');
@@ -838,7 +963,8 @@
                 'dashboard': 'Dashboard',
                 'products': 'Produtos Ativos',
                 'loans': 'Empréstimos',
-                'archived': 'Itens Arquivados'
+                'history': 'Histórico',
+                'archived': 'Itens com Baixa'
             };
             document.getElementById('sectionTitle').textContent = titles[section];
             
@@ -847,6 +973,8 @@
                 loadCategoryFilter();
             } else if (section === 'loans') {
                 loadAllLoans();
+            } else if (section === 'history') {
+                loadHistory();
             } else if (section === 'archived') {
                 loadArchivedItems();
             }
@@ -914,6 +1042,35 @@
                     </div>
                 `;
             }
+
+            // Últimas movimentações
+            const recentMovements = movements.slice(-5).reverse();
+            const recentList = document.getElementById('recentMovementsList');
+            if (recentMovements.length > 0) {
+                recentList.innerHTML = recentMovements.map(m => {
+                    let icon = m.type === 'entry' ? '📥' : m.type === 'exit' ? '📤' : m.type === 'loan' ? '🔧' : m.type === 'return' ? '↩️' : '🗑️';
+                    let color = m.type === 'entry' ? '#16a34a' : m.type === 'exit' ? '#dc2626' : m.type === 'loan' ? '#2563eb' : m.type === 'return' ? '#10b981' : '#f97316';
+                    return `
+                        <div class="timeline-item">
+                            <div class="timeline-icon" style="background: ${color}20; color: ${color}">
+                                ${icon}
+                            </div>
+                            <div class="timeline-content">
+                                <h4>${m.productName}</h4>
+                                <p>${m.type === 'entry' ? 'Entrada' : m.type === 'exit' ? 'Saída' : m.type === 'loan' ? 'Empréstimo' : m.type === 'return' ? 'Devolução' : 'Baixa'} • ${m.quantity} unid.</p>
+                                <small>${m.date}</small>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                recentList.innerHTML = `
+                    <div class="empty-state">
+                        <span>📊</span>
+                        <p>Nenhuma movimentação recente</p>
+                    </div>
+                `;
+            }
         }
 
         // PRODUTOS
@@ -971,7 +1128,7 @@
                         <div class="item-actions">
                             <button class="btn-edit" onclick="editProduct(${p.id})">Editar</button>
                             <button class="btn-loan" onclick="openLoanModal(${p.id})">Emprestar</button>
-                            <button class="btn-archive-item" onclick="archiveProduct(${p.id})">Arquivar</button>
+                            <button class="btn-permanent" onclick="openPermanentModal(${p.id})">Baixa</button>
                             <button class="btn-delete" onclick="deleteProduct(${p.id})">Excluir</button>
                         </div>
                     </div>
@@ -1040,18 +1197,6 @@
             loadLoanProductSelect();
         }
 
-        function archiveProduct(id) {
-            if (confirm('Arquivar este item? Ele não aparecerá mais na lista de produtos ativos.')) {
-                const index = products.findIndex(p => p.id === id);
-                products[index].archived = true;
-                localStorage.setItem('products', JSON.stringify(products));
-                loadProducts();
-                updateDashboard();
-                loadCategoryFilter();
-                loadArchivedItems();
-            }
-        }
-
         function deleteProduct(id) {
             if (confirm('Excluir permanentemente este item?')) {
                 products = products.filter(p => p.id !== id);
@@ -1063,7 +1208,54 @@
             }
         }
 
-        // ITENS ARQUIVADOS
+        // BAIXA PERMANENTE (substitui o arquivamento)
+        function openPermanentModal(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                document.getElementById('permanentInfo').innerHTML = `
+                    <strong>Registrar baixa permanente:</strong><br>
+                    🔧 ${product.name}<br>
+                    📦 Quantidade atual: ${product.quantity}
+                `;
+                document.getElementById('permanentDate').value = new Date().toISOString().split('T')[0];
+                document.getElementById('permanentProductId').value = productId;
+                document.getElementById('permanentModal').classList.add('active');
+            }
+        }
+
+        function savePermanent() {
+            const productId = parseInt(document.getElementById('permanentProductId').value);
+            const date = document.getElementById('permanentDate').value;
+            const observation = document.getElementById('permanentObservation').value;
+            
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            // Registrar movimentação de baixa
+            movements.push({
+                id: Date.now(),
+                productId: product.id,
+                productName: product.name,
+                quantity: product.quantity,
+                date: date,
+                type: 'permanent',
+                observation: observation || 'Baixa permanente'
+            });
+
+            // Remover o produto (ou marcar como arquivado)
+            product.archived = true;
+            
+            localStorage.setItem('products', JSON.stringify(products));
+            localStorage.setItem('movements', JSON.stringify(movements));
+            
+            closeModal('permanentModal');
+            loadProducts();
+            updateDashboard();
+            loadArchivedItems();
+            loadHistory();
+        }
+
+        // ITENS ARQUIVADOS (baixa permanente)
         function loadArchivedItems() {
             const archived = products.filter(p => p.archived);
             const list = document.getElementById('archivedList');
@@ -1075,29 +1267,19 @@
                             <h4>${p.name}</h4>
                             <p>📍 ${p.local}</p>
                             <p>🏷️ ${p.category}</p>
-                            <small>Quantidade: ${p.quantity}</small>
+                            <small>Última quantidade: ${p.quantity}</small>
                         </div>
                         <div class="item-status status-archived">
-                            Arquivado
+                            Baixa Permanente
                         </div>
                         <div class="item-actions">
-                            <button class="btn-restore" onclick="restoreProduct(${p.id})">Restaurar</button>
                             <button class="btn-delete" onclick="deleteProduct(${p.id})">Excluir</button>
                         </div>
                     </div>
                 `).join('');
             } else {
-                list.innerHTML = '<div class="empty-state"><span>📦</span><p>Nenhum item arquivado</p></div>';
+                list.innerHTML = '<div class="empty-state"><span>📦</span><p>Nenhum item com baixa permanente</p></div>';
             }
-        }
-
-        function restoreProduct(id) {
-            const index = products.findIndex(p => p.id === id);
-            products[index].archived = false;
-            localStorage.setItem('products', JSON.stringify(products));
-            loadArchivedItems();
-            loadProducts();
-            updateDashboard();
         }
 
         // EMPRÉSTIMOS
@@ -1155,7 +1337,8 @@
                 productName: product.name,
                 quantity: qty,
                 date,
-                type: 'loan'
+                type: 'loan',
+                observation: `Emprestado para ${user}`
             });
             
             localStorage.setItem('loans', JSON.stringify(loans));
@@ -1178,7 +1361,7 @@
                 return;
             }
             
-            let html = '<h3 style="margin-bottom: 15px;">🔧 Empréstimos Ativos</h3>';
+            let html = '<h3 style="margin-bottom: 16px;">🔧 Empréstimos Ativos</h3>';
             
             if (active.length > 0) {
                 html += active.map(l => `
@@ -1198,11 +1381,11 @@
                     </div>
                 `).join('');
             } else {
-                html += '<p style="color: #999; padding: 15px;">Nenhum empréstimo ativo</p>';
+                html += '<p style="color: #94a3b8; padding: 16px;">Nenhum empréstimo ativo</p>';
             }
             
             if (returned.length > 0) {
-                html += '<h3 style="margin: 30px 0 15px;">✅ Histórico de Devoluções</h3>';
+                html += '<h3 style="margin: 32px 0 16px;">✅ Histórico de Devoluções</h3>';
                 html += returned.slice(0, 5).map(l => `
                     <div class="list-item">
                         <div class="item-info">
@@ -1252,7 +1435,8 @@
                 productName: loans[index].productName,
                 quantity: loans[index].quantity,
                 date: returnDate,
-                type: 'return'
+                type: 'return',
+                observation: `Devolvido por ${loans[index].userName}`
             });
             
             localStorage.setItem('loans', JSON.stringify(loans));
@@ -1263,6 +1447,40 @@
             loadProducts();
             loadLoanProductSelect();
             showSection('dashboard');
+        }
+
+        // HISTÓRICO
+        function loadHistory() {
+            const dateFilter = document.getElementById('historyDate').value;
+            let filtered = movements;
+            if (dateFilter) {
+                filtered = movements.filter(m => m.date === dateFilter);
+            }
+            
+            const list = document.getElementById('historyList');
+            if (filtered.length === 0) {
+                list.innerHTML = '<div class="empty-state"><span>📋</span><p>Nenhuma movimentação encontrada</p></div>';
+                return;
+            }
+            
+            list.innerHTML = filtered.sort((a,b) => b.id - a.id).map(m => {
+                let icon = m.type === 'entry' ? '📥' : m.type === 'exit' ? '📤' : m.type === 'loan' ? '🔧' : m.type === 'return' ? '↩️' : '🗑️';
+                let typeName = m.type === 'entry' ? 'Entrada' : m.type === 'exit' ? 'Saída' : m.type === 'loan' ? 'Empréstimo' : m.type === 'return' ? 'Devolução' : 'Baixa Permanente';
+                let color = m.type === 'entry' ? '#16a34a' : m.type === 'exit' ? '#dc2626' : m.type === 'loan' ? '#2563eb' : m.type === 'return' ? '#10b981' : '#f97316';
+                
+                return `
+                    <div class="list-item">
+                        <div class="item-info">
+                            <h4>${m.productName}</h4>
+                            <p>${typeName} • ${m.quantity} unid.</p>
+                            <small>${m.date} ${m.observation ? ' • ' + m.observation : ''}</small>
+                        </div>
+                        <div style="background: ${color}20; color: ${color}; padding: 4px 12px; border-radius: 40px; font-size: 12px; font-weight: 600;">
+                            ${icon}
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         function closeModal(id) {
